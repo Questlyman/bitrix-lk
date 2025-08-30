@@ -1,0 +1,17 @@
+node_modules/
+.env
+
+logs/
+*.log
+
+# Сборка
+dist/
+build/
+
+# Среда разработки
+.vscode/
+.idea/
+
+# ОС-мусор
+.DS_Store
+Thumbs.db
