@@ -45,7 +45,6 @@ export async function getDeals(req, res) {
       deals[i].DATE_CREATE = formatter.format(create_date);
       deals[i].DATE_MODIFY = formatter.format(mod_date);
     }
-    console.log(deals);
     return res.json(deals);
   } catch (e) {
     console.error(
