@@ -1,10 +1,5 @@
 import { createContext, useState } from "react";
-export type Company = {
-  companyId: number | null;
-  companyName: string | null;
-  companyPhone: string | null;
-  industry: string | null;
-};
+import type { Company } from "../models/Models";
 type AuthContextValue = {
   company: Company | null;
   setCompany: (company: Company | null) => void;

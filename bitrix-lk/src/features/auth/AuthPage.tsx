@@ -2,7 +2,7 @@ import logo from "../../assets/logo.png";
 import { useContext, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
-import type { Company } from "../../contexts/AuthContext";
+import type { Company } from "../../models/Models";
 const AuthPage = () => {
   const ACCENT = "#0CBEF1";
   const { setCompany } = useContext(AuthContext);
@@ -13,7 +13,7 @@ const AuthPage = () => {
     const form = new FormData(e.currentTarget);
     const phone: string = String(form.get("phone") ?? "");
     const password: string = String(form.get("password") ?? "");
-    const url = import.meta.env.VITE_BACKERND_URL;
+    const url = import.meta.env.VITE_BACKEND_URL;
 
     try {
       const res = await fetch(`${url}/auth/login`, {

@@ -1,22 +1,17 @@
 import { useContext, useEffect, useState, type FormEvent } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-type Deal = {
-  ID: string | null;
-  TITLE: string | null;
-  STAGE_ID: string | null;
-  OPPORTUNITY: string | null;
-  DATE_CREATE: string | null;
-  DATE_MODIFY: string | null;
-  COMMENTS: string | null;
-};
+import type { Deal } from "../../models/Models";
+import DealList from "./components/DealList";
+import CompanyInfo from "./components/CompanyInfo";
+
 const Lk = () => {
   const { company, setCompany } = useContext(AuthContext);
   const [state, setState] = useState(0);
   const [error, setError] = useState<null | string>(null);
   const [deals, setDeals] = useState<null | Array<Deal>>(null);
   const navbar = ["Общие", "Сделки", "Оставить заявку"];
-  const url = import.meta.env.VITE_BACKERND_URL;
+  const url = import.meta.env.VITE_BACKEND_URL;
   const ACCENT = "#0CBEF1";
   const labelCls = "block text-base font-semibold mb-1";
   const inputBase =
@@ -44,6 +39,7 @@ const Lk = () => {
         setError(texterror?.error);
       } else {
         const data: Deal[] = await response.json();
+        console.log(data[0].documents);
         setDeals(data);
       }
     } catch (e) {
@@ -149,67 +145,9 @@ const Lk = () => {
       {(() => {
         switch (state) {
           case 0:
-            return (
-              <section className="bg-gray-100 rounded-2xl p-6 shadow mb-6">
-                <h2 className="text-lg font-semibold mb-4 text-[#0CBEF1]">
-                  О компании
-                </h2>
-                <div className="space-y-3 text-sm">
-                  <p>
-                    <span className="text-gray-500">Сфера деятельности:</span>{" "}
-                    {company?.industry}
-                  </p>
-                  <p>
-                    <span className="text-gray-500">Телефон:</span>{" "}
-                    <span className="tracking-wider">
-                      {company?.companyPhone}
-                    </span>
-                  </p>
-                </div>
-              </section>
-            );
+            return <CompanyInfo company={company}/>
           case 1:
-            if (deals !== null) {
-              return (
-                <section className="space-y-4">
-                  {deals.length === 0 ? (
-                    <div className="text-center text-gray-500">Сделок нет</div>
-                  ) : (
-                    deals.map((deal, index) => (
-                      <div
-                        key={deal.ID ?? index}
-                        className="bg-gray-50 rounded-xl p-4 shadow flex flex-col gap-2 border border-gray-200"
-                      >
-                        <div className="flex justify-between items-center">
-                          <h3 className="text-base font-semibold text-[#0CBEF1]">
-                            {deal.TITLE || "Без названия"}
-                          </h3>
-                        </div>
-                        <div className="flex flex-wrap gap-4 text-sm text-gray-700">
-                          <span>
-                            Стоимость:{" "}
-                            {deal.OPPORTUNITY !== null
-                              ? `${deal.OPPORTUNITY} ₽`
-                              : "-"}
-                          </span>
-                          <span>Создана: {deal.DATE_CREATE || "-"}</span>
-                          <span>Изменена: {deal.DATE_MODIFY || "-"}</span>
-                          <span>Статус сделки: {deal.STAGE_ID || "-"}</span>
-                        </div>
-                        {deal.COMMENTS && (
-                          <div className="text-xs text-gray-500 mt-2">
-                            <span className="font-medium">Комментарий:</span>{" "}
-                            {deal.COMMENTS}
-                          </div>
-                        )}
-                      </div>
-                    ))
-                  )}
-                </section>
-              );
-            } else {
-              return <h3 className="flex justify-center">{error}</h3>;
-            }
+            return <DealList deals={deals} error={error} />;
           case 2:
             return (
               <div className="min-h-screen bg-white text-black">
